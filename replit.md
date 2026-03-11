@@ -1,27 +1,61 @@
-# CompIQ Compensation Suite
+# CompIQ — Compensation Suite
 
-A pre-built static frontend application — a compensation intelligence dashboard (CompIQ).
+A compensation intelligence dashboard built with React, TypeScript, Vite, and Tailwind CSS.
 
-## Project Overview
+## Project Structure
 
-This is a fully pre-compiled static site. All assets are bundled and ready to serve. No build step is required.
+```
+src/
+  main.tsx                    # React app entry point
+  App.tsx                     # Root component with router setup
+  index.css                   # Global styles + CSS design tokens
 
-## Structure
+  pages/
+    Dashboard.tsx             # / — Overview, KPI cards, charts
+    SalaryBenchmarking.tsx    # /benchmarking — Role vs market data
+    PayScaleDesign.tsx        # /payscale — Grade & band builder
+    RemunerationStructure.tsx # /remuneration — CTC component builder
+    NotFound.tsx              # * — 404 page
 
-- `index.html` — Entry point
-- `assets/` — Pre-built CSS, JS, and image assets
-- `package.json` — Node.js project (serves the static files)
+  components/
+    layout/
+      AppLayout.tsx           # Shared layout wrapper (header + outlet)
+      AppSidebar.tsx          # Collapsible sidebar navigation
+    ui/
+      Button.tsx              # Reusable button component
+      Input.tsx               # Reusable text input
+      Select.tsx              # Radix-based select dropdown
+      Slider.tsx              # Radix-based range slider
+      Switch.tsx              # Radix-based toggle switch
+
+  data/
+    dashboard.ts              # KPI stats, chart data, activity feed
+    benchmarking.ts           # Role data, market percentiles, helpers
+    payscale.ts               # Grade band data, chart colours
+    remuneration.ts           # CTC component definitions
+
+  lib/
+    utils.ts                  # cn() Tailwind class merge utility
+```
+
+## Tech Stack
+
+- **React 18** + **TypeScript**
+- **Vite 5** — dev server & bundler
+- **React Router DOM v6** — client-side routing
+- **Tailwind CSS v3** — utility-first styling with custom design tokens
+- **Recharts** — AreaChart, BarChart, PieChart, RadarChart
+- **Lucide React** — icon library
+- **Radix UI** — accessible UI primitives (Select, Switch, Slider)
 
 ## Running the App
 
-The app is served using the `serve` npm package:
-
 ```
-npx serve -s . -l 5000
+npm run dev
 ```
 
-This runs on port 5000, accessible via the Replit preview pane.
+Runs on port **5000** via Vite.
 
 ## Deployment
 
-Configured as a **static** deployment with `publicDir: "."` — the root directory contains `index.html` and the `assets/` folder.
+Configured as a **static** deployment using `vite build`. Output goes to `dist/`.
