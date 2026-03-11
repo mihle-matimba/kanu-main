@@ -97,9 +97,26 @@ export default function Auth() {
           flexShrink: 0,
         }}
       >
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(160deg, rgba(15,23,42,0.82) 0%, rgba(30,41,59,0.78) 55%, rgba(15,32,39,0.84) 100%)" }} />
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px)", backgroundSize: "42px 42px" }} />
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: 0,
+          }}
+        >
+          <source src="/assets/authtruck.mp4" type="video/mp4" />
+        </video>
 
+        {/* Decorative elements */}
         <div style={{ position: "absolute", left: "26px", bottom: "96px", display: "grid", gap: "8px", zIndex: 2 }}>
           <div style={{ width: "84px", height: "6px", borderRadius: "4px", background: "rgba(147,197,253,0.45)" }} />
           <div style={{ width: "54px", height: "6px", borderRadius: "4px", background: "rgba(148,163,184,0.38)" }} />
@@ -111,16 +128,17 @@ export default function Auth() {
           <div style={{ width: "76px", height: "6px", borderRadius: "4px", background: "rgba(147,197,253,0.26)" }} />
         </div>
 
-        <div style={{ position: "absolute", top: "-60px", left: "-60px", width: "300px", height: "300px", borderRadius: "50%", background: "radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%)" }} />
-        <div style={{ position: "absolute", bottom: "-40px", right: "-40px", width: "250px", height: "250px", borderRadius: "50%", background: "radial-gradient(circle, rgba(14,165,233,0.16) 0%, transparent 70%)" }} />
+        {/* Keeping the soft corner radial gradients, but let me know if you want these gone too! */}
+        <div style={{ position: "absolute", top: "-60px", left: "-60px", width: "300px", height: "300px", borderRadius: "50%", background: "radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%)", zIndex: 1 }} />
+        <div style={{ position: "absolute", bottom: "-40px", right: "-40px", width: "250px", height: "250px", borderRadius: "50%", background: "radial-gradient(circle, rgba(14,165,233,0.16) 0%, transparent 70%)", zIndex: 1 }} />
 
         <div style={{ position: "absolute", top: "24px", left: "24px", zIndex: 2, width: "180px", height: "56px", display: "flex", alignItems: "center" }}>
           <img src="/assets/Logo.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </div>
 
         <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "0 40px" }}>
-          <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "11px", fontWeight: "500", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "14px" }}>Commercial Body Construction</p>
-          <h2 style={{ color: "white", fontSize: "28px", fontWeight: "600", lineHeight: "1.35", margin: "0 0 36px", letterSpacing: "-0.5px" }}>
+          <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "11px", fontWeight: "500", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "14px", textShadow: "0px 1px 2px rgba(0,0,0,0.5)" }}>Commercial Body Construction</p>
+          <h2 style={{ color: "white", fontSize: "28px", fontWeight: "600", lineHeight: "1.35", margin: "0 0 36px", letterSpacing: "-0.5px", textShadow: "0px 2px 4px rgba(0,0,0,0.5)" }}>
             Move freight smarter,
             <br />
             <span style={{ color: "#93c5fd" }}>deliver faster.</span>
@@ -128,7 +146,7 @@ export default function Auth() {
         </div>
 
         <div style={{ position: "absolute", bottom: "28px", zIndex: 2, textAlign: "center" }}>
-          <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "12px", margin: 0, letterSpacing: "0.2px" }}>Trusted by 2,400+ fleet operators worldwide</p>
+          <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "12px", margin: 0, letterSpacing: "0.2px", textShadow: "0px 1px 2px rgba(0,0,0,0.5)" }}>Trusted by 2,400+ fleet operators worldwide</p>
         </div>
       </div>
 
