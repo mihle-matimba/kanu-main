@@ -528,7 +528,7 @@ export default function SalaryBenchmarking() {
           { label: "vs P75", gap: r.internal - r.p75 },
         ];
         const maxAbs = Math.max(...gapData.map((d) => Math.abs(d.gap)));
-        const yPad = Math.ceil(maxAbs * 0.4);
+        const yPad = Math.ceil(maxAbs * 0.18);
         const yDomain = [-(maxAbs + yPad), maxAbs + yPad];
 
         return (
@@ -570,12 +570,12 @@ export default function SalaryBenchmarking() {
                   </div>
                 </div>
 
-                <ResponsiveContainer width="100%" height={240}>
+                <ResponsiveContainer width="100%" height={340}>
                   <BarChart
                     data={gapData}
-                    margin={{ top: 28, right: 16, bottom: 8, left: 4 }}
+                    margin={{ top: 32, right: 16, bottom: 8, left: 4 }}
                     barCategoryGap="20%"
-                    barSize={72}
+                    barSize={80}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(218,20%,91%)" vertical={false} />
                     <XAxis
