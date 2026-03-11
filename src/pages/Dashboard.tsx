@@ -97,31 +97,19 @@ export default function Dashboard() {
       >
         <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-white/20" />
 
-        <div className="relative z-10 px-8 py-7 w-full max-w-2xl flex flex-col justify-between gap-4">
-          {/* Welcome block */}
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-600 mb-2">
-              Good day
-            </p>
-            <h1 className="text-4xl font-extrabold text-slate-900 leading-tight tracking-tight">
-              Welcome back,
-            </h1>
-            <h1 className="text-4xl font-extrabold leading-tight tracking-tight"
-              style={{ color: 'hsl(171,76%,28%)' }}>
-              Sthembiso Nkomo
-            </h1>
-          </div>
-
-          {/* Divider + report tag */}
-          <div className="flex items-center gap-3">
-            <div className="h-px w-8 bg-slate-300" />
-            <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-              FY 2026 — Q1 Report
-            </p>
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-teal-50 text-teal-700 border border-teal-200">
-              Compensation Intelligence at a Glance
-            </span>
-          </div>
+        <div className="relative z-10 p-6 w-full max-w-2xl">
+          <p className="text-3xl font-bold text-slate-900 mb-1">
+            Welcome,{" "}
+            <span style={{ color: 'hsl(171,76%,28%)' }}>Sthembiso Nkomo</span>
+          </p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-teal-700 mb-1">
+            FY 2026 — Q1 Report
+          </p>
+          <h2 className="text-2xl font-bold text-slate-900 leading-tight">
+            Compensation Intelligence
+            <br />
+            at a Glance
+          </h2>
         </div>
       </div>
 
