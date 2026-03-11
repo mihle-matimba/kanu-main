@@ -99,7 +99,7 @@ export default function Dashboard() {
 
         <div className="relative z-10 p-6 w-full max-w-2xl">
           <p className="text-3xl font-bold text-slate-900 mb-1">
-            Welcome,{" "}
+            Welcome{" "}
             <span style={{ color: 'hsl(171,76%,28%)' }}>Sthembiso Nkomo</span>
           </p>
           <p className="text-xs font-semibold uppercase tracking-widest text-teal-700 mb-1">
