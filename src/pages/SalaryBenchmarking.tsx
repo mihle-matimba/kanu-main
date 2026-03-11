@@ -81,50 +81,6 @@ export default function SalaryBenchmarking() {
 
   return (
     <div className="space-y-6">
-      {/* Filter bar */}
-      <div className="flex flex-wrap gap-3 items-center">
-        <div className="relative flex-1 min-w-48">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-          <Input
-            placeholder="Search role titles…"
-            className="pl-9 h-10 bg-card text-sm"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-
-        <Select value={dept} onValueChange={setDept}>
-          <SelectTrigger className="w-44 h-10 bg-card text-sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {departments.map((d) => (
-              <SelectItem key={d} value={d}>
-                {d}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={level} onValueChange={setLevel}>
-          <SelectTrigger className="w-36 h-10 bg-card text-sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {levels.map((l) => (
-              <SelectItem key={l} value={l}>
-                {l}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <div className="text-xs text-muted-foreground ml-auto">
-          Showing{" "}
-          <span className="font-semibold text-foreground">{filtered.length}</span> roles
-        </div>
-      </div>
-
       {/* Internal vs Market Percentiles — Bar Chart */}
       <div className="bg-card rounded-xl border border-border p-5 shadow-card">
         <div className="flex items-center justify-between mb-4">
@@ -183,12 +139,58 @@ export default function SalaryBenchmarking() {
 
       {/* Role table */}
       <div className="bg-card rounded-xl border border-border shadow-card overflow-hidden">
-        <div className="flex items-center justify-between p-5 border-b border-border">
-          <div>
-            <h3 className="font-bold text-foreground">Role Benchmarking Table</h3>
-            <p className="text-xs text-muted-foreground">
-              Click a row to view detailed benchmarking
-            </p>
+        <div className="p-5 border-b border-border space-y-3">
+          {/* Title row */}
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-bold text-foreground">Role Benchmarking Table</h3>
+              <p className="text-xs text-muted-foreground">
+                Click a row to view detailed benchmarking
+              </p>
+            </div>
+            <span className="text-xs text-muted-foreground">
+              Showing{" "}
+              <span className="font-semibold text-foreground">{filtered.length}</span> roles
+            </span>
+          </div>
+
+          {/* Filter row */}
+          <div className="flex flex-wrap gap-2 items-center">
+            <div className="relative flex-1 min-w-40">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+              <Input
+                placeholder="Search role titles…"
+                className="pl-9 h-9 bg-muted/50 border-border text-sm"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+
+            <Select value={dept} onValueChange={setDept}>
+              <SelectTrigger className="w-44 h-9 bg-muted/50 border-border text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {departments.map((d) => (
+                  <SelectItem key={d} value={d}>
+                    {d}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={level} onValueChange={setLevel}>
+              <SelectTrigger className="w-36 h-9 bg-muted/50 border-border text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {levels.map((l) => (
+                  <SelectItem key={l} value={l}>
+                    {l}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
         <div className="overflow-x-auto">
