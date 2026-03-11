@@ -25,11 +25,20 @@ import {
   statCards,
   salaryTrendData,
   departmentSalaryData,
-  gradeDistributionData,
   recentActivityData,
   activityStatusStyles,
 } from "@/data/dashboard";
-import heroBanner from "../../assets/hero-banner-Ak053so-.jpg";
+
+/** * UPDATED GRADING SYSTEM: Teal Monochromatic Scale
+ */
+const gradeDistributionData = [
+  { name: "A Band – Unskilled / Operational", value: 35, fill: "#0f766e" }, // Teal-700
+  { name: "B Band – Semi-skilled / Clerical", value: 25, fill: "#0d9488" }, // Teal-600
+  { name: "C Band – Skilled / Supervisory", value: 20, fill: "#14b8a6" }, // Teal-500
+  { name: "D Band – Middle Management", value: 12, fill: "#2dd4bf" }, // Teal-400
+  { name: "E Band – Senior Management", value: 5, fill: "#5eead4" },  // Teal-300
+  { name: "F Band – Executives / Leadership", value: 3, fill: "#99f6e4" },  // Teal-200
+];
 
 const iconMap = {
   Users,
@@ -75,21 +84,24 @@ function DeptTooltip({ active, payload, label }: TooltipProps) {
 export default function Dashboard() {
   return (
     <div className="space-y-6">
-      {/* Hero banner */}
+      {/* Hero banner - Image fixed to the right, dynamic expanding gradient on the left */}
       <div
-        className="relative rounded-2xl overflow-hidden h-44 flex items-end"
+        className="relative rounded-2xl overflow-hidden h-44 flex items-end shadow-sm border border-border/50 bg-white"
         style={{
-          backgroundImage: `url(${heroBanner})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundImage: `url('/assets/New%20Banner.jpeg')`,
+          backgroundSize: 'auto 100%',     // Keeps image proportioned to the container's height
+          backgroundPosition: 'right center', // Sticks the image to the far right
+          backgroundRepeat: 'no-repeat',      // Prevents the image from tiling
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-deep/90 via-navy-deep/60 to-transparent" />
-        <div className="relative z-10 p-6">
-          <p className="text-xs font-semibold uppercase tracking-widest text-teal-light mb-1">
-            FY 2025 — Q2 Report
+        {/* Gradient that covers the expanding left side and fades into the image on the right */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent" />
+        
+        <div className="relative z-10 p-6 w-full max-w-2xl">
+          <p className="text-xs font-semibold uppercase tracking-widest text-teal-700 mb-1">
+            FY 2026 — Q1 Report
           </p>
-          <h2 className="text-2xl font-bold text-primary-foreground leading-tight">
+          <h2 className="text-2xl font-bold text-slate-900 leading-tight">
             Compensation Intelligence
             <br />
             at a Glance
@@ -97,22 +109,24 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* KPI stat cards */}
+      {/* KPI stat cards - Back to Teal highlights */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map((card) => {
           const Icon = iconMap[card.icon as keyof typeof iconMap];
+          const colorClass = "bg-teal-500/10 text-teal-600";
+          
           return (
             <div
               key={card.label}
               className="bg-card rounded-xl border border-border p-5 shadow-card hover:shadow-lg-custom transition-shadow"
             >
               <div className="flex items-start justify-between mb-3">
-                <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${card.color}`}>
+                <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${colorClass}`}>
                   <Icon size={18} />
                 </div>
                 <span
                   className={`flex items-center gap-0.5 text-xs font-semibold ${
-                    card.up ? "text-green" : "text-amber"
+                    card.up ? "text-teal-600" : "text-amber-600"
                   }`}
                 >
                   {card.up ? <ArrowUpRight size={13} /> : <ArrowDownRight size={13} />}
@@ -130,7 +144,7 @@ export default function Dashboard() {
 
       {/* Salary trend + Pay Grade Distribution */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Salary vs Market Trend — Area Chart */}
+        {/* Salary vs Market Trend — Area Chart (Teal Theme) */}
         <div className="lg:col-span-2 bg-card rounded-xl border border-border p-5 shadow-card">
           <div className="flex items-center justify-between mb-5">
             <div>
@@ -142,7 +156,7 @@ export default function Dashboard() {
             <div className="flex items-center gap-4 text-xs">
               {[
                 { label: "Company Avg", color: "hsl(171,76%,34%)" },
-                { label: "Market P50", color: "hsl(38,92%,50%)" },
+                { label: "Market P50", color: "#94a3b8" },
               ].map(({ label, color }) => (
                 <span key={label} className="flex items-center gap-1.5 text-muted-foreground">
                   <span
@@ -154,7 +168,7 @@ export default function Dashboard() {
               ))}
             </div>
           </div>
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer width="100%" height={220}>
             <AreaChart
               data={salaryTrendData}
               margin={{ top: 4, right: 4, bottom: 0, left: 0 }}
@@ -163,10 +177,6 @@ export default function Dashboard() {
                 <linearGradient id="avgGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="hsl(171,76%,34%)" stopOpacity={0.25} />
                   <stop offset="95%" stopColor="hsl(171,76%,34%)" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="mktGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(38,92%,50%)" stopOpacity={0.15} />
-                  <stop offset="95%" stopColor="hsl(38,92%,50%)" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(218,20%,91%)" vertical={false} />
@@ -195,8 +205,8 @@ export default function Dashboard() {
                 type="monotone"
                 dataKey="market"
                 name="Market P50"
-                stroke="hsl(38,92%,50%)"
-                fill="url(#mktGrad)"
+                stroke="#94a3b8"
+                fill="transparent"
                 strokeWidth={2}
                 strokeDasharray="4 3"
               />
@@ -204,21 +214,21 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </div>
 
-        {/* Pay Grade Distribution — Pie Chart */}
+        {/* Pay Grade Distribution — Pie Chart (Teal Theme) */}
         <div className="bg-card rounded-xl border border-border p-5 shadow-card">
           <h3 className="font-bold text-foreground mb-1">Pay Grade Distribution</h3>
           <p className="text-xs text-muted-foreground mb-4">
             Employee headcount by grade band
           </p>
-          <ResponsiveContainer width="100%" height={160}>
+          <ResponsiveContainer width="100%" height={180}>
             <PieChart>
               <Pie
                 data={gradeDistributionData}
                 cx="50%"
                 cy="50%"
-                innerRadius={45}
-                outerRadius={70}
-                paddingAngle={3}
+                innerRadius={50}
+                outerRadius={75}
+                paddingAngle={4}
                 dataKey="value"
               >
                 {gradeDistributionData.map((entry, index) => (
@@ -228,15 +238,15 @@ export default function Dashboard() {
               <Tooltip formatter={(value) => [`${value}%`, ""]} />
             </PieChart>
           </ResponsiveContainer>
-          <div className="space-y-1.5 mt-2">
+          <div className="space-y-1.5 mt-4">
             {gradeDistributionData.map((entry) => (
-              <div key={entry.name} className="flex items-center justify-between text-xs">
-                <span className="flex items-center gap-2 text-muted-foreground">
+              <div key={entry.name} className="flex items-center justify-between text-[11px]">
+                <span className="flex items-center gap-2 text-muted-foreground max-w-[80%]">
                   <span
-                    className="h-2 w-2 rounded-sm inline-block"
+                    className="h-2 w-2 rounded-sm inline-block shrink-0"
                     style={{ backgroundColor: entry.fill }}
                   />
-                  {entry.name}
+                  <span className="truncate">{entry.name}</span>
                 </span>
                 <span className="font-semibold text-foreground">{entry.value}%</span>
               </div>
@@ -247,22 +257,22 @@ export default function Dashboard() {
 
       {/* Dept Avg Salary + Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Average Salary by Department — Bar Chart */}
+        {/* Average Salary by Department — Bar Chart (Teal Theme) */}
         <div className="lg:col-span-2 bg-card rounded-xl border border-border p-5 shadow-card">
           <div className="flex items-center justify-between mb-5">
             <div>
               <h3 className="font-bold text-foreground">Average Salary by Department</h3>
               <p className="text-xs text-muted-foreground">
-                Annual base salary · FY 2025
+                Annual base salary · FY 2026
               </p>
             </div>
             <ChartNoAxesColumn size={16} className="text-muted-foreground" />
           </div>
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer width="100%" height={220}>
             <BarChart
               data={departmentSalaryData}
               margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-              barSize={28}
+              barSize={32}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(218,20%,91%)" vertical={false} />
               <XAxis
@@ -295,7 +305,7 @@ export default function Dashboard() {
           </div>
           <ul className="divide-y divide-border">
             {recentActivityData.map((item) => (
-              <li key={item.role} className="flex items-start gap-3 px-5 py-3">
+              <li key={item.role} className="flex items-start gap-3 px-5 py-4 hover:bg-muted/50 transition-colors">
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-foreground truncate">
                     {item.role}
@@ -305,9 +315,7 @@ export default function Dashboard() {
                   </p>
                 </div>
                 <span
-                  className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${
-                    activityStatusStyles[item.status]
-                  }`}
+                  className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-teal-50 text-teal-700 border border-teal-100`}
                 >
                   {item.action}
                 </span>

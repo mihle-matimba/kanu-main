@@ -7,7 +7,6 @@ import {
   GitBranch,
   Users,
   Settings,
-  TrendingUp,
   ChevronRight,
   PanelLeft,
 } from "lucide-react";
@@ -53,38 +52,55 @@ export default function AppSidebar() {
   return (
     <aside
       className={cn(
-        "flex flex-col h-full bg-sidebar border-r border-sidebar-border transition-all duration-300",
-        collapsed ? "w-16" : "w-60"
+        "relative flex flex-col h-full border-r border-white/5 transition-all duration-300 ease-in-out z-50 shadow-2xl overflow-hidden",
+        "bg-gradient-to-b from-[#2e2e2e] via-[#242424] to-[#1a1a1a]", 
+        collapsed ? "w-16" : "w-64"
       )}
     >
-      {/* Logo / Brand */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-sidebar-border">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal">
-          <TrendingUp className="h-5 w-5 text-sidebar-primary-foreground" />
+      {/* Metallic Damascus Pattern Overlay with Truck Tire Tread Grooves */}
+      <div className="absolute inset-0 opacity-[0.1] pointer-events-none mix-blend-overlay">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <filter id="industrialDamascus">
+            {/* Coarse base noise for Damascus texture */}
+            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="5" seed="1" result="foldedSteel" />
+            
+            {/* Creates grooved, straight distortions resembling a coarse truck tire tread with water ripples */}
+            <feTurbulence type="turbulence" baseFrequency="0.1 0.005" numOctaves="1" seed="2" result="tireGrooves" />
+            
+            {/* Displace the Damascus steel pattern with the coarse grooves for a complex industrial texture */}
+            <feDisplacementMap in="foldedSteel" in2="tireGrooves" scale="25" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#industrialDamascus)" fill="transparent" />
+        </svg>
+      </div>
+
+      {/* Logo / Brand Section */}
+      <div className="relative z-10 flex items-center gap-3 px-4 py-6 border-b border-white/5">
+        <div className={cn(
+          "flex shrink-0 items-center justify-center overflow-hidden rounded-lg transition-all duration-300",
+          collapsed ? "h-8 w-8" : "h-14 w-full" 
+        )}>
+          <img 
+            src="/assets/Logo.png" 
+            alt="Logo" 
+            className={cn(
+              "h-full object-contain",
+              !collapsed ? "w-full" : "w-auto"
+            )}
+          />
         </div>
-        {!collapsed && (
-          <div className="flex flex-col">
-            <span className="text-sm font-bold text-sidebar-primary-foreground tracking-tight">
-              CompIQ
-            </span>
-            <span className="text-[10px] text-sidebar-foreground/60 uppercase tracking-widest">
-              Compensation Suite
-            </span>
-          </div>
-        )}
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-2 py-4 overflow-y-auto">
+      <nav className="relative z-10 flex-1 px-3 py-6 overflow-y-auto custom-scrollbar">
         {!collapsed && (
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-sidebar-foreground/50 px-2 mb-2">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 px-3 mb-4">
             Main Menu
           </p>
         )}
-        <ul className="space-y-1">
+        <ul className="space-y-1.5">
           {navItems.map((item) => {
-            const isActive =
-              item.url === "/" ? pathname === "/" : pathname.startsWith(item.url);
+            const isActive = item.url === "/" ? pathname === "/" : pathname.startsWith(item.url);
             return (
               <li key={item.title}>
                 <NavLink
@@ -92,31 +108,31 @@ export default function AppSidebar() {
                   end={item.url === "/"}
                   title={collapsed ? item.title : undefined}
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-150",
+                    "flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-all duration-200 group",
                     isActive
-                      ? "bg-teal text-sidebar-primary-foreground font-semibold"
-                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                      ? "bg-white/10 text-white shadow-inner ring-1 ring-white/10"
+                      : "text-gray-400 hover:bg-white/5 hover:text-gray-100"
                   )}
                 >
                   <item.icon
-                    size={18}
+                    size={20}
                     className={cn(
-                      "shrink-0",
-                      isActive ? "text-sidebar-primary-foreground" : ""
+                      "shrink-0 transition-transform duration-200 group-hover:scale-110",
+                      isActive ? "text-teal-400" : "text-gray-400"
                     )}
                   />
                   {!collapsed && (
                     <div className="flex flex-1 flex-col min-w-0">
-                      <span className="truncate">{item.title}</span>
+                      <span className="truncate font-medium">{item.title}</span>
                       {!isActive && (
-                        <span className="text-[10px] text-sidebar-foreground/40 truncate">
+                        <span className="text-[10px] text-gray-500 truncate group-hover:text-gray-400">
                           {item.description}
                         </span>
                       )}
                     </div>
                   )}
                   {!collapsed && isActive && (
-                    <ChevronRight className="h-3.5 w-3.5 shrink-0" />
+                    <div className="h-1.5 w-1.5 rounded-full bg-teal-400 animate-pulse shadow-[0_0_8px_rgba(45,212,191,0.6)]" />
                   )}
                 </NavLink>
               </li>
@@ -125,41 +141,34 @@ export default function AppSidebar() {
         </ul>
       </nav>
 
-      {/* Footer */}
-      <div className="border-t border-sidebar-border p-2 space-y-2">
-        {/* Settings */}
+      {/* Footer / Actions */}
+      <div className="relative z-10 mt-auto border-t border-white/5 p-3 space-y-1">
         <button
-          title={collapsed ? "Settings" : undefined}
-          className="w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
+          aria-label="Settings"
+          className="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-gray-400 hover:bg-white/5 hover:text-white transition-all group"
         >
-          <Settings size={18} className="shrink-0" />
-          {!collapsed && <span>Settings</span>}
+          <Settings size={18} className="shrink-0 group-hover:rotate-45 transition-transform duration-300" />
+          {!collapsed && <span className="font-medium">Settings</span>}
         </button>
 
-        {/* Collapse toggle */}
         <button
           onClick={() => setCollapsed((prev) => !prev)}
-          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-gray-500 hover:bg-white/5 hover:text-white transition-all"
         >
-          <PanelLeft size={16} className="shrink-0" />
-          {!collapsed && <span className="text-xs">Collapse</span>}
+          <PanelLeft size={18} className={cn("shrink-0 transition-transform", collapsed && "rotate-180")} />
+          {!collapsed && <span className="text-xs font-medium">Collapse View</span>}
         </button>
 
-        {/* User card */}
         {!collapsed && (
-          <div className="mt-1 rounded-lg bg-sidebar-accent/60 p-3">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="h-6 w-6 rounded-full bg-teal/30 flex items-center justify-center">
-                <span className="text-[10px] font-bold text-teal-light">MG</span>
+          <div className="mt-2 rounded-xl bg-gradient-to-r from-white/5 to-transparent p-3 ring-1 ring-white/5">
+            <div className="flex items-center gap-2">
+              <div className="h-7 w-7 rounded-lg bg-teal-500/20 flex items-center justify-center ring-1 ring-teal-500/30">
+                <span className="text-[10px] font-bold text-teal-400">MG</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-[11px] font-semibold text-sidebar-accent-foreground">
-                  Manager Portal
-                </span>
-                <span className="text-[10px] text-sidebar-foreground/50">
-                  FY 2025 Active
-                </span>
+                <span className="text-[11px] font-bold text-gray-100">Manager Portal</span>
+                <span className="text-[10px] text-gray-500">FY 2026 Active</span>
               </div>
             </div>
           </div>
