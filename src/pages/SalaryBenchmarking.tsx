@@ -530,6 +530,7 @@ export default function SalaryBenchmarking() {
         const maxAbs = Math.max(...gapData.map((d) => Math.abs(d.gap)));
         const yPad = Math.ceil(maxAbs * 0.18);
         const yDomain = [-(maxAbs + yPad), maxAbs + yPad];
+        const yTicks = [yDomain[0], Math.round(yDomain[0] / 2), 0, Math.round(yDomain[1] / 2), yDomain[1]];
 
         return (
           <div className="bg-card rounded-xl border border-border shadow-card animate-fade-in overflow-hidden">
@@ -574,7 +575,7 @@ export default function SalaryBenchmarking() {
                   <BarChart
                     data={gapData}
                     margin={{ top: 32, right: 16, bottom: 8, left: 4 }}
-                    barCategoryGap="5%"
+                    barCategoryGap="0%"
                     barSize={120}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(218,20%,91%)" vertical={false} />
@@ -586,10 +587,11 @@ export default function SalaryBenchmarking() {
                     />
                     <YAxis
                       domain={yDomain}
+                      ticks={yTicks}
                       axisLine={false}
                       tickLine={false}
                       tick={{ fontSize: 10, fill: "hsl(218,15%,55%)" }}
-                      tickFormatter={(v) => `R${(v / 1000).toFixed(0)}k`}
+                      tickFormatter={(v) => v === 0 ? "R0" : `R${(v / 1000).toFixed(0)}k`}
                       width={44}
                     />
                     <Tooltip
