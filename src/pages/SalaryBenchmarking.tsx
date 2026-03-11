@@ -83,6 +83,21 @@ function BenchmarkingTooltip({ active, payload, label }: TooltipProps) {
   );
 }
 
+function WrappedTick({ x, y, payload }: { x: number; y: number; payload: { value: string } }) {
+  const words = (payload.value as string).split(" ");
+  const mid = Math.ceil(words.length / 2);
+  const line1 = words.slice(0, mid).join(" ");
+  const line2 = words.slice(mid).join(" ");
+  return (
+    <g transform={`translate(${x},${y + 6})`} overflow="visible">
+      <text textAnchor="middle" fill="hsl(222,30%,30%)" fontSize={11} fontWeight={500} overflow="visible">
+        <tspan x={0} dy="0">{line1}</tspan>
+        {line2 && <tspan x={0} dy="14">{line2}</tspan>}
+      </text>
+    </g>
+  );
+}
+
 function initials(name: string) {
   return name
     .split(" ")
@@ -120,7 +135,7 @@ export default function SalaryBenchmarking() {
     : filtered;
 
   const chartData = filtered.slice(0, 8).map((r) => ({
-    name: r.title.length > 18 ? r.title.slice(0, 18) + "…" : r.title,
+    name: r.title,
     internal: r.internal,
     p25: r.p25,
     p50: r.p50,
@@ -161,22 +176,20 @@ export default function SalaryBenchmarking() {
             ))}
           </div>
         </div>
-        <ResponsiveContainer width="100%" height={320}>
+        <ResponsiveContainer width="100%" height={420}>
           <BarChart
             data={chartData}
-            margin={{ top: 4, right: 4, bottom: 72, left: 0 }}
+            margin={{ top: 4, right: 4, bottom: 16, left: 0 }}
             barGap={2}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(218,20%,91%)" vertical={false} />
             <XAxis
               dataKey="name"
-              tick={{ fontSize: 11, fill: "hsl(222,30%,30%)", fontWeight: 500 }}
               axisLine={false}
               tickLine={false}
-              angle={-40}
-              textAnchor="end"
               interval={0}
-              height={72}
+              height={52}
+              tick={(props) => <WrappedTick {...props} />}
             />
             <YAxis
               tick={{ fontSize: 11 }}
@@ -185,10 +198,10 @@ export default function SalaryBenchmarking() {
               tickFormatter={(v) => `R${(v / 1000).toFixed(0)}k`}
             />
             <Tooltip content={<BenchmarkingTooltip />} />
-            <Bar dataKey="p25" fill="hsl(171,55%,72%)" radius={[4, 4, 0, 0]} barSize={14} />
-            <Bar dataKey="p50" fill="hsl(171,62%,52%)" radius={[4, 4, 0, 0]} barSize={14} />
-            <Bar dataKey="p75" fill="hsl(171,76%,34%)" radius={[4, 4, 0, 0]} barSize={14} />
-            <Bar dataKey="internal" fill="hsl(222,60%,25%)" radius={[4, 4, 0, 0]} barSize={14} />
+            <Bar dataKey="p25" fill="hsl(171,55%,72%)" radius={[4, 4, 0, 0]} barSize={18} />
+            <Bar dataKey="p50" fill="hsl(171,62%,52%)" radius={[4, 4, 0, 0]} barSize={18} />
+            <Bar dataKey="p75" fill="hsl(171,76%,34%)" radius={[4, 4, 0, 0]} barSize={18} />
+            <Bar dataKey="internal" fill="hsl(222,60%,25%)" radius={[4, 4, 0, 0]} barSize={18} />
           </BarChart>
         </ResponsiveContainer>
       </div>
