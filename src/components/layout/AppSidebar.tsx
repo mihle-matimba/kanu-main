@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   {
     title: "Dashboard",
-    url: "/",
+    url: "/dashboard",
     icon: LayoutDashboard,
     description: "Overview & insights",
   },
@@ -99,7 +99,7 @@ export default function AppSidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-10 flex-1 px-3 py-6 overflow-y-auto custom-scrollbar">
+      <nav className="relative z-10 flex-1 px-3 py-6 overflow-hidden">
         {!collapsed && (
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 px-3 mb-4">
             Main Menu
@@ -107,12 +107,12 @@ export default function AppSidebar() {
         )}
         <ul className="space-y-1.5">
           {navItems.map((item) => {
-            const isActive = item.url === "/" ? pathname === "/" : pathname.startsWith(item.url);
+            const isActive = pathname.startsWith(item.url);
             return (
               <li key={item.title}>
                 <NavLink
                   to={item.url}
-                  end={item.url === "/"}
+                  end={item.url === "/dashboard"}
                   title={collapsed ? item.title : undefined}
                   className={cn(
                     "flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-all duration-200 group",

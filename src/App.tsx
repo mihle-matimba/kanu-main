@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./components/layout/AppLayout";
+import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import SalaryBenchmarking from "./pages/SalaryBenchmarking";
 import PayScaleDesign from "./pages/PayScaleDesign";
@@ -17,8 +18,9 @@ export default function App() {
       <JobProfilingProvider>
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <Routes>
+            <Route path="/" element={<Auth />} />
             <Route element={<AppLayout />}>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/benchmarking" element={<SalaryBenchmarking />} />
               <Route path="/payscale" element={<PayScaleDesign />} />
               <Route path="/remuneration" element={<RemunerationStructure />} />

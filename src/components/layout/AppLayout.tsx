@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 
 const pageMeta: Record<string, { title: string; subtitle: string }> = {
-  "/": {
+  "/dashboard": {
     title: "Dashboard",
     subtitle: "Compensation overview & key metrics",
   },
