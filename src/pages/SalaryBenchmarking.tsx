@@ -17,6 +17,8 @@ import {
   MapPin,
   Clock,
   X,
+  LayoutGrid,
+  List,
 } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import {
@@ -97,6 +99,7 @@ export default function SalaryBenchmarking() {
   const [search, setSearch] = useState("");
   const [selectedRole, setSelectedRole] = useState<Role>(roles[0]);
   const [activeRoleFilter, setActiveRoleFilter] = useState<string | null>(null);
+  const [empView, setEmpView] = useState<"card" | "list">("card");
 
   const filtered = roles.filter((r) => {
     if (dept !== "All Departments" && r.dept !== dept) return false;
@@ -333,9 +336,10 @@ export default function SalaryBenchmarking() {
           </table>
         </div>
 
-        {/* Employee panel — shown when a role chip is active */}
+        {/* Employee panel — shown when a role is active */}
         {activeRoleData && (
           <div className="border-t border-border p-5 animate-fade-in">
+            {/* Panel header */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-lg bg-teal/10 flex items-center justify-center">
@@ -351,60 +355,158 @@ export default function SalaryBenchmarking() {
                   </p>
                 </div>
               </div>
-              <button
-                onClick={() => setActiveRoleFilter(null)}
-                className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
-              >
-                <X size={13} /> Clear filter
-              </button>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-              {activeRoleData.employees.map((emp, i) => (
-                <div
-                  key={emp.name}
-                  className="flex items-start gap-3 rounded-xl border border-border bg-muted/30 p-3 hover:bg-muted/50 transition-colors"
-                >
-                  {/* Avatar */}
-                  <div
+              <div className="flex items-center gap-3">
+                {/* View toggle */}
+                <div className="flex items-center rounded-lg border border-border bg-muted/40 p-0.5">
+                  <button
+                    onClick={() => setEmpView("card")}
+                    title="Card view"
                     className={cn(
-                      "h-9 w-9 shrink-0 rounded-full flex items-center justify-center text-xs font-bold",
-                      avatarColors[i % avatarColors.length]
+                      "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all",
+                      empView === "card"
+                        ? "bg-card text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
                     )}
                   >
-                    {initials(emp.name)}
-                  </div>
-
-                  {/* Details */}
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-foreground truncate">{emp.name}</p>
-                    <p className="text-xs font-medium text-teal mt-0.5">
-                      R {emp.salary.toLocaleString()}
-                    </p>
-                    <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1.5">
-                      <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                        <MapPin size={9} />
-                        {emp.location}
-                      </span>
-                      <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                        <Clock size={9} />
-                        {emp.tenure}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Status badge */}
-                  <span
+                    <LayoutGrid size={13} />
+                    Cards
+                  </button>
+                  <button
+                    onClick={() => setEmpView("list")}
+                    title="List view"
                     className={cn(
-                      "shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full",
-                      statusStyles[emp.status]
+                      "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all",
+                      empView === "list"
+                        ? "bg-card text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
                     )}
                   >
-                    {emp.status}
-                  </span>
+                    <List size={13} />
+                    List
+                  </button>
                 </div>
-              ))}
+
+                <button
+                  onClick={() => setActiveRoleFilter(null)}
+                  className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+                >
+                  <X size={13} /> Clear filter
+                </button>
+              </div>
             </div>
+
+            {/* Card view */}
+            {empView === "card" && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                {activeRoleData.employees.map((emp, i) => (
+                  <div
+                    key={emp.name}
+                    className="flex items-start gap-3 rounded-xl border border-border bg-muted/30 p-3 hover:bg-muted/50 transition-colors"
+                  >
+                    <div
+                      className={cn(
+                        "h-9 w-9 shrink-0 rounded-full flex items-center justify-center text-xs font-bold",
+                        avatarColors[i % avatarColors.length]
+                      )}
+                    >
+                      {initials(emp.name)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm text-foreground truncate">{emp.name}</p>
+                      <p className="text-xs font-medium text-teal mt-0.5">
+                        R {emp.salary.toLocaleString()}
+                      </p>
+                      <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1.5">
+                        <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                          <MapPin size={9} />
+                          {emp.location}
+                        </span>
+                        <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                          <Clock size={9} />
+                          {emp.tenure}
+                        </span>
+                      </div>
+                    </div>
+                    <span
+                      className={cn(
+                        "shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full",
+                        statusStyles[emp.status]
+                      )}
+                    >
+                      {emp.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* List view */}
+            {empView === "list" && (
+              <div className="overflow-x-auto rounded-xl border border-border">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border bg-muted/40">
+                      {["Name", "Salary", "Location", "Tenure", "Status"].map((col) => (
+                        <th
+                          key={col}
+                          className="text-left text-xs font-semibold text-muted-foreground px-4 py-3"
+                        >
+                          {col}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {activeRoleData.employees.map((emp, i) => (
+                      <tr
+                        key={emp.name}
+                        className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors"
+                      >
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2.5">
+                            <div
+                              className={cn(
+                                "h-7 w-7 shrink-0 rounded-full flex items-center justify-center text-[10px] font-bold",
+                                avatarColors[i % avatarColors.length]
+                              )}
+                            >
+                              {initials(emp.name)}
+                            </div>
+                            <span className="font-semibold text-foreground">{emp.name}</span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 font-medium text-teal">
+                          R {emp.salary.toLocaleString()}
+                        </td>
+                        <td className="px-4 py-3 text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <MapPin size={11} />
+                            {emp.location}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <Clock size={11} />
+                            {emp.tenure}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3">
+                          <span
+                            className={cn(
+                              "text-[11px] font-semibold px-2.5 py-0.5 rounded-full",
+                              statusStyles[emp.status]
+                            )}
+                          >
+                            {emp.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
       </div>
