@@ -98,6 +98,9 @@ export default function Dashboard() {
         <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent" />
         
         <div className="relative z-10 p-6 w-full max-w-2xl">
+          <p className="text-sm font-semibold text-slate-700 mb-0.5">
+            Welcome, Sthembiso Nkomo
+          </p>
           <p className="text-xs font-semibold uppercase tracking-widest text-teal-700 mb-1">
             FY 2026 — Q1 Report
           </p>

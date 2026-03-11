@@ -493,7 +493,7 @@ export default function SalaryBenchmarking() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border bg-muted/40">
-                      {["Name", "Salary", "Location", "Tenure", "Status"].map((col) => (
+                      {["Name", "Salary", "Industry (P50)", "vs Industry", "Location", "Tenure", "Status"].map((col) => (
                         <th
                           key={col}
                           className="text-left text-xs font-semibold text-muted-foreground px-4 py-3"
@@ -504,48 +504,70 @@ export default function SalaryBenchmarking() {
                     </tr>
                   </thead>
                   <tbody>
-                    {activeRoleData.employees.map((emp, i) => (
-                      <tr
-                        key={emp.name}
-                        className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors"
-                      >
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-2.5">
-                            <img
-                              src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(emp.name)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`}
-                              alt={emp.name}
-                              className="h-7 w-7 shrink-0 rounded-full bg-muted object-cover"
-                            />
-                            <span className="font-semibold text-foreground">{emp.name}</span>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 font-medium text-teal">
-                          R {emp.salary.toLocaleString()}
-                        </td>
-                        <td className="px-4 py-3 text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <MapPin size={11} />
-                            {emp.location}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Clock size={11} />
-                            {emp.tenure}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3">
-                          <span
-                            className={cn(
-                              "text-[11px] font-semibold px-2.5 py-0.5 rounded-full",
-                              statusStyles[emp.status]
-                            )}
-                          >
-                            {emp.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
+                    {activeRoleData.employees.map((emp, i) => {
+                      const industryP50 = activeRoleData.p50;
+                      const diffPct = industryP50
+                        ? Math.round(((emp.salary - industryP50) / industryP50) * 100)
+                        : 0;
+                      const diffPositive = diffPct >= 0;
+                      return (
+                        <tr
+                          key={emp.name}
+                          className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors"
+                        >
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-2.5">
+                              <img
+                                src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(emp.name)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`}
+                                alt={emp.name}
+                                className="h-7 w-7 shrink-0 rounded-full bg-muted object-cover"
+                              />
+                              <span className="font-semibold text-foreground">{emp.name}</span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 font-medium text-teal">
+                            R {emp.salary.toLocaleString()}
+                          </td>
+                          <td className="px-4 py-3 text-muted-foreground">
+                            R {industryP50.toLocaleString()}
+                          </td>
+                          <td className="px-4 py-3">
+                            <span
+                              className={cn(
+                                "text-[11px] font-bold px-2 py-0.5 rounded-full",
+                                diffPositive
+                                  ? "bg-green-faint text-green"
+                                  : "bg-rose/10 text-rose"
+                              )}
+                            >
+                              {diffPositive ? "+" : ""}{diffPct}%
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <MapPin size={11} />
+                              {emp.location}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Clock size={11} />
+                              {emp.tenure}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3">
+                            <span
+                              className={cn(
+                                "text-[11px] font-semibold px-2.5 py-0.5 rounded-full",
+                                statusStyles[emp.status]
+                              )}
+                            >
+                              {emp.status}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

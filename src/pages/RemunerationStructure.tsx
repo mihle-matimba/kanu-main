@@ -12,7 +12,7 @@ import {
   PolarRadiusAxis,
 } from "recharts";
 import {
-  DollarSign,
+  Banknote,
   House,
   Car,
   Heart,
@@ -33,7 +33,7 @@ import {
 } from "@/data/remuneration";
 
 const iconMap = {
-  DollarSign,
+  Banknote,
   House,
   Car,
   Heart,
@@ -145,7 +145,7 @@ export default function RemunerationStructure() {
             </div>
             <div className="divide-y divide-border">
               {components.map((comp) => {
-                const Icon = iconMap[comp.icon as keyof typeof iconMap] ?? DollarSign;
+                const Icon = iconMap[comp.icon as keyof typeof iconMap] ?? Banknote;
                 const isSelected = selectedId === comp.id;
                 return (
                   <div
@@ -291,7 +291,7 @@ export default function RemunerationStructure() {
               <div className="flex items-center gap-2 mb-3">
                 {(() => {
                   const Icon =
-                    iconMap[selectedComponent.icon as keyof typeof iconMap] ?? DollarSign;
+                    iconMap[selectedComponent.icon as keyof typeof iconMap] ?? Banknote;
                   return (
                     <div
                       className="h-8 w-8 rounded-lg flex items-center justify-center"
