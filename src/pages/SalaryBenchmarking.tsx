@@ -8,7 +8,16 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { Search, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import {
+  Search,
+  TrendingUp,
+  TrendingDown,
+  Minus,
+  Users,
+  MapPin,
+  Clock,
+  X,
+} from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import {
   Select,
@@ -25,11 +34,18 @@ import {
   getMarketPosition,
   type Role,
 } from "@/data/benchmarking";
+import { cn } from "@/lib/utils";
 
 const positionIconMap = {
   TrendingUp,
   TrendingDown,
   Minus,
+};
+
+const statusStyles: Record<string, string> = {
+  Active: "bg-green-faint text-green",
+  "On Leave": "bg-amber-faint text-amber",
+  Contract: "bg-teal-faint text-teal",
 };
 
 type TooltipProps = {
@@ -58,11 +74,29 @@ function BenchmarkingTooltip({ active, payload, label }: TooltipProps) {
   );
 }
 
+function initials(name: string) {
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+}
+
+const avatarColors = [
+  "bg-teal/20 text-teal",
+  "bg-amber/20 text-amber",
+  "bg-navy-mid/30 text-navy-mid",
+  "bg-green/20 text-green",
+  "bg-rose/20 text-rose",
+];
+
 export default function SalaryBenchmarking() {
   const [dept, setDept] = useState("All Departments");
   const [level, setLevel] = useState("All Levels");
   const [search, setSearch] = useState("");
   const [selectedRole, setSelectedRole] = useState<Role>(roles[0]);
+  const [activeRoleFilter, setActiveRoleFilter] = useState<string | null>(null);
 
   const filtered = roles.filter((r) => {
     if (dept !== "All Departments" && r.dept !== dept) return false;
@@ -71,6 +105,10 @@ export default function SalaryBenchmarking() {
     return true;
   });
 
+  const tableRows = activeRoleFilter
+    ? filtered.filter((r) => r.title === activeRoleFilter)
+    : filtered;
+
   const chartData = filtered.slice(0, 8).map((r) => ({
     name: r.title.length > 18 ? r.title.slice(0, 18) + "…" : r.title,
     internal: r.internal,
@@ -78,6 +116,18 @@ export default function SalaryBenchmarking() {
     p50: r.p50,
     p75: r.p75,
   }));
+
+  const activeRoleData = activeRoleFilter
+    ? roles.find((r) => r.title === activeRoleFilter)
+    : null;
+
+  function handleRoleChip(title: string) {
+    if (activeRoleFilter === title) {
+      setActiveRoleFilter(null);
+    } else {
+      setActiveRoleFilter(title);
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -139,22 +189,24 @@ export default function SalaryBenchmarking() {
 
       {/* Role table */}
       <div className="bg-card rounded-xl border border-border shadow-card overflow-hidden">
+        {/* Table header */}
         <div className="p-5 border-b border-border space-y-3">
-          {/* Title row */}
+          {/* Title + count */}
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-bold text-foreground">Role Benchmarking Table</h3>
               <p className="text-xs text-muted-foreground">
-                Click a row to view detailed benchmarking
+                Select a role filter to view employees in that role
               </p>
             </div>
             <span className="text-xs text-muted-foreground">
               Showing{" "}
-              <span className="font-semibold text-foreground">{filtered.length}</span> roles
+              <span className="font-semibold text-foreground">{tableRows.length}</span>{" "}
+              {activeRoleFilter ? "role" : "roles"}
             </span>
           </div>
 
-          {/* Filter row */}
+          {/* Search + dropdowns */}
           <div className="flex flex-wrap gap-2 items-center">
             <div className="relative flex-1 min-w-40">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
@@ -192,7 +244,32 @@ export default function SalaryBenchmarking() {
               </SelectContent>
             </Select>
           </div>
+
+          {/* Role filter chips */}
+          <div className="flex gap-2 flex-wrap">
+            {filtered.map((role) => {
+              const isActive = activeRoleFilter === role.title;
+              return (
+                <button
+                  key={role.title}
+                  onClick={() => handleRoleChip(role.title)}
+                  className={cn(
+                    "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border transition-all",
+                    isActive
+                      ? "bg-teal text-white border-teal shadow-sm"
+                      : "bg-muted/50 text-muted-foreground border-border hover:bg-muted hover:text-foreground"
+                  )}
+                >
+                  <Users size={11} />
+                  {role.title}
+                  {isActive && <X size={11} className="ml-0.5 opacity-80" />}
+                </button>
+              );
+            })}
+          </div>
         </div>
+
+        {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -210,7 +287,7 @@ export default function SalaryBenchmarking() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((role) => {
+              {tableRows.map((role) => {
                 const ratio = getCompaRatio(role.internal, role.p50);
                 const pos = getMarketPosition(role.internal, role.p25, role.p50, role.p75);
                 const PosIcon = positionIconMap[pos.icon as keyof typeof positionIconMap];
@@ -267,6 +344,81 @@ export default function SalaryBenchmarking() {
             </tbody>
           </table>
         </div>
+
+        {/* Employee panel — shown when a role chip is active */}
+        {activeRoleData && (
+          <div className="border-t border-border p-5 animate-fade-in">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div className="h-8 w-8 rounded-lg bg-teal/10 flex items-center justify-center">
+                  <Users size={16} className="text-teal" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-foreground text-sm">
+                    People in {activeRoleData.title}
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    {activeRoleData.dept} · {activeRoleData.level} ·{" "}
+                    {activeRoleData.employees.length} shown
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setActiveRoleFilter(null)}
+                className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+              >
+                <X size={13} /> Clear filter
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+              {activeRoleData.employees.map((emp, i) => (
+                <div
+                  key={emp.name}
+                  className="flex items-start gap-3 rounded-xl border border-border bg-muted/30 p-3 hover:bg-muted/50 transition-colors"
+                >
+                  {/* Avatar */}
+                  <div
+                    className={cn(
+                      "h-9 w-9 shrink-0 rounded-full flex items-center justify-center text-xs font-bold",
+                      avatarColors[i % avatarColors.length]
+                    )}
+                  >
+                    {initials(emp.name)}
+                  </div>
+
+                  {/* Details */}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-sm text-foreground truncate">{emp.name}</p>
+                    <p className="text-xs font-medium text-teal mt-0.5">
+                      R {emp.salary.toLocaleString()}
+                    </p>
+                    <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1.5">
+                      <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                        <MapPin size={9} />
+                        {emp.location}
+                      </span>
+                      <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                        <Clock size={9} />
+                        {emp.tenure}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Status badge */}
+                  <span
+                    className={cn(
+                      "shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full",
+                      statusStyles[emp.status]
+                    )}
+                  >
+                    {emp.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Role detail panel */}
