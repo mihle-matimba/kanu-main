@@ -121,14 +121,6 @@ export default function SalaryBenchmarking() {
     ? roles.find((r) => r.title === activeRoleFilter)
     : null;
 
-  function handleRoleChip(title: string) {
-    if (activeRoleFilter === title) {
-      setActiveRoleFilter(null);
-    } else {
-      setActiveRoleFilter(title);
-    }
-  }
-
   return (
     <div className="space-y-6">
       {/* Internal vs Market Percentiles — Bar Chart */}
@@ -245,27 +237,27 @@ export default function SalaryBenchmarking() {
             </Select>
           </div>
 
-          {/* Role filter chips */}
-          <div className="flex gap-2 flex-wrap">
-            {filtered.map((role) => {
-              const isActive = activeRoleFilter === role.title;
-              return (
-                <button
-                  key={role.title}
-                  onClick={() => handleRoleChip(role.title)}
-                  className={cn(
-                    "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border transition-all",
-                    isActive
-                      ? "bg-teal text-white border-teal shadow-sm"
-                      : "bg-muted/50 text-muted-foreground border-border hover:bg-muted hover:text-foreground"
-                  )}
-                >
-                  <Users size={11} />
-                  {role.title}
-                  {isActive && <X size={11} className="ml-0.5 opacity-80" />}
-                </button>
-              );
-            })}
+          {/* Role filter dropdown */}
+          <div className="flex items-center gap-2">
+            <Users size={14} className="text-muted-foreground shrink-0" />
+            <Select
+              value={activeRoleFilter ?? "All Roles"}
+              onValueChange={(val) => setActiveRoleFilter(val === "All Roles" ? null : val)}
+            >
+              <SelectTrigger className="flex-1 h-9 bg-muted/50 border-border text-sm">
+                <SelectValue placeholder="Filter by role…" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All Roles">All Roles</SelectItem>
+                {[...filtered]
+                  .sort((a, b) => a.title.localeCompare(b.title))
+                  .map((role) => (
+                    <SelectItem key={role.title} value={role.title}>
+                      {role.title}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
