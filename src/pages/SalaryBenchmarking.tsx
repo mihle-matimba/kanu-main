@@ -570,12 +570,12 @@ export default function SalaryBenchmarking() {
                   </div>
                 </div>
 
-                <ResponsiveContainer width="100%" height={340}>
+                <ResponsiveContainer width="100%" height={400}>
                   <BarChart
                     data={gapData}
                     margin={{ top: 32, right: 16, bottom: 8, left: 4 }}
-                    barCategoryGap="20%"
-                    barSize={80}
+                    barCategoryGap="5%"
+                    barSize={120}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(218,20%,91%)" vertical={false} />
                     <XAxis
