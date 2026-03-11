@@ -102,7 +102,7 @@ export default function SalaryBenchmarking() {
   const [search, setSearch] = useState("");
   const [selectedRole, setSelectedRole] = useState<Role>(roles[0]);
   const [activeRoleFilter, setActiveRoleFilter] = useState<string | null>(null);
-  const [empView, setEmpView] = useState<"card" | "list">("card");
+  const [empView, setEmpView] = useState<"card" | "list">("list");
 
   const filtered = roles.filter((r) => {
     if (dept !== "All Departments" && r.dept !== dept) return false;
@@ -409,14 +409,11 @@ export default function SalaryBenchmarking() {
                     key={emp.name}
                     className="flex items-start gap-3 rounded-xl border border-border bg-muted/30 p-3 hover:bg-muted/50 transition-colors"
                   >
-                    <div
-                      className={cn(
-                        "h-9 w-9 shrink-0 rounded-full flex items-center justify-center text-xs font-bold",
-                        avatarColors[i % avatarColors.length]
-                      )}
-                    >
-                      {initials(emp.name)}
-                    </div>
+                    <img
+                      src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(emp.name)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`}
+                      alt={emp.name}
+                      className="h-9 w-9 shrink-0 rounded-full bg-muted object-cover"
+                    />
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-sm text-foreground truncate">{emp.name}</p>
                       <p className="text-xs font-medium text-teal mt-0.5">
@@ -470,14 +467,11 @@ export default function SalaryBenchmarking() {
                       >
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2.5">
-                            <div
-                              className={cn(
-                                "h-7 w-7 shrink-0 rounded-full flex items-center justify-center text-[10px] font-bold",
-                                avatarColors[i % avatarColors.length]
-                              )}
-                            >
-                              {initials(emp.name)}
-                            </div>
+                            <img
+                              src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(emp.name)}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`}
+                              alt={emp.name}
+                              className="h-7 w-7 shrink-0 rounded-full bg-muted object-cover"
+                            />
                             <span className="font-semibold text-foreground">{emp.name}</span>
                           </div>
                         </td>
