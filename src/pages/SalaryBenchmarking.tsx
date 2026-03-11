@@ -137,10 +137,10 @@ export default function SalaryBenchmarking() {
           </div>
           <div className="flex flex-wrap gap-3 text-xs">
             {[
-              { label: "Internal", color: "hsl(171,76%,34%)" },
-              { label: "P25", color: "hsl(218,20%,80%)" },
-              { label: "P50", color: "hsl(38,92%,50%)" },
-              { label: "P75", color: "hsl(222,60%,40%)" },
+              { label: "Internal", color: "hsl(222,60%,25%)" },
+              { label: "P25", color: "hsl(171,55%,72%)" },
+              { label: "P50", color: "hsl(171,62%,52%)" },
+              { label: "P75", color: "hsl(171,76%,34%)" },
             ].map(({ label, color }) => (
               <span key={label} className="flex items-center gap-1.5 text-muted-foreground">
                 <span
@@ -174,10 +174,10 @@ export default function SalaryBenchmarking() {
               tickFormatter={(v) => `R${(v / 1000).toFixed(0)}k`}
             />
             <Tooltip content={<BenchmarkingTooltip />} />
-            <Bar dataKey="p25" fill="hsl(218,20%,82%)" radius={[4, 4, 0, 0]} barSize={14} />
-            <Bar dataKey="p50" fill="hsl(38,92%,50%)" radius={[4, 4, 0, 0]} barSize={14} />
-            <Bar dataKey="p75" fill="hsl(222,60%,40%)" radius={[4, 4, 0, 0]} barSize={14} />
-            <Bar dataKey="internal" fill="hsl(171,76%,34%)" radius={[4, 4, 0, 0]} barSize={14} />
+            <Bar dataKey="p25" fill="hsl(171,55%,72%)" radius={[4, 4, 0, 0]} barSize={14} />
+            <Bar dataKey="p50" fill="hsl(171,62%,52%)" radius={[4, 4, 0, 0]} barSize={14} />
+            <Bar dataKey="p75" fill="hsl(171,76%,34%)" radius={[4, 4, 0, 0]} barSize={14} />
+            <Bar dataKey="internal" fill="hsl(222,60%,25%)" radius={[4, 4, 0, 0]} barSize={14} />
           </BarChart>
         </ResponsiveContainer>
       </div>
