@@ -63,9 +63,9 @@ type TooltipProps = {
 function BenchmarkingTooltip({ active, payload, label }: TooltipProps) {
   if (!active || !payload?.length) return null;
   const keyMeta: Record<string, { label: string; color: string }> = {
-    p25:      { label: "P25",      color: "hsl(171,55%,38%)" },
-    p50:      { label: "P50",      color: "hsl(171,62%,30%)" },
-    p75:      { label: "P75",      color: "hsl(171,76%,22%)" },
+    p25:      { label: "Low",      color: "hsl(171,55%,38%)" },
+    p50:      { label: "Mid",      color: "hsl(171,62%,30%)" },
+    p75:      { label: "Max",      color: "hsl(171,76%,22%)" },
     internal: { label: "Internal", color: "hsl(222,60%,22%)" },
   };
   return (
@@ -181,15 +181,15 @@ export default function SalaryBenchmarking() {
           <div>
             <h3 className="font-bold text-foreground">Internal vs Market Percentiles</h3>
             <p className="text-xs text-muted-foreground">
-              Comparing internal pay to P25, P50, P75 market data
+              Comparing internal pay to Low, Mid, Max market data
             </p>
           </div>
           <div className="flex flex-wrap gap-3 text-xs">
             {[
               { label: "Internal", color: "hsl(222,60%,25%)" },
-              { label: "P25", color: "hsl(171,55%,72%)" },
-              { label: "P50", color: "hsl(171,62%,52%)" },
-              { label: "P75", color: "hsl(171,76%,34%)" },
+              { label: "Low", color: "hsl(171,55%,72%)" },
+              { label: "Mid", color: "hsl(171,62%,52%)" },
+              { label: "Max", color: "hsl(171,76%,34%)" },
             ].map(({ label, color }) => (
               <span key={label} className="flex items-center gap-1.5 text-muted-foreground">
                 <span
@@ -314,7 +314,7 @@ export default function SalaryBenchmarking() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/40">
-                {["Role", "Department", "Level", "Internal", "P25", "P50", "P75", "Compa-Ratio", "Position"].map(
+                {["Role", "Department", "Level", "Internal", "Low", "Mid", "Max", "Compa-Ratio", "Position"].map(
                   (col) => (
                     <th
                       key={col}
@@ -493,7 +493,7 @@ export default function SalaryBenchmarking() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border bg-muted/40">
-                      {["Name", "Salary", "Industry (P50)", "vs Industry", "Location", "Tenure", "Status"].map((col) => (
+                      {["Name", "Salary", "Industry (Mid)", "vs Industry", "Location", "Tenure", "Status"].map((col) => (
                         <th
                           key={col}
                           className="text-left text-xs font-semibold text-muted-foreground px-4 py-3"
@@ -583,9 +583,9 @@ export default function SalaryBenchmarking() {
         const PosIcon = positionIconMap[pos.icon as keyof typeof positionIconMap];
         const ratio = getCompaRatio(r.internal, r.p50);
         const gapData = [
-          { label: "vs P25", gap: r.internal - r.p25 },
-          { label: "vs P50", gap: r.internal - r.p50 },
-          { label: "vs P75", gap: r.internal - r.p75 },
+          { label: "vs Low", gap: r.internal - r.p25 },
+          { label: "vs Mid", gap: r.internal - r.p50 },
+          { label: "vs Max", gap: r.internal - r.p75 },
         ];
         const maxAbs = Math.max(...gapData.map((d) => Math.abs(d.gap)));
         const yPad = Math.ceil(maxAbs * 0.18);
@@ -690,7 +690,7 @@ export default function SalaryBenchmarking() {
                 <div className="grid grid-cols-2 gap-2.5">
                   {[
                     { label: "Internal Salary", val: `R ${r.internal.toLocaleString()}`, highlight: true },
-                    { label: "Market P50",       val: `R ${r.p50.toLocaleString()}` },
+                    { label: "Market Mid",       val: `R ${r.p50.toLocaleString()}` },
                     {
                       label: "Compa-Ratio",
                       val: `${ratio}%`,
@@ -700,7 +700,7 @@ export default function SalaryBenchmarking() {
                         parseFloat(ratio) < 90   ? "text-rose"  : "text-teal",
                     },
                     {
-                      label: "Gap to P50",
+                      label: "Gap to Mid",
                       val: `${r.internal >= r.p50 ? "+" : "-"}R ${Math.abs(r.p50 - r.internal).toLocaleString()}`,
                       accent: r.internal >= r.p50 ? "text-green" : "text-rose",
                     },
@@ -724,9 +724,9 @@ export default function SalaryBenchmarking() {
                       <div className="flex-1" style={{ background: "hsl(171,76%,34%,0.4)" }} />
                     </div>
                     <div className="absolute inset-0 flex items-center px-2.5 justify-between">
-                      <span className="text-[10px] font-semibold text-foreground/70">P25: R {r.p25.toLocaleString()}</span>
-                      <span className="text-[10px] font-semibold text-foreground/70">P50: R {r.p50.toLocaleString()}</span>
-                      <span className="text-[10px] font-semibold text-foreground/70">P75: R {r.p75.toLocaleString()}</span>
+                      <span className="text-[10px] font-semibold text-foreground/70">Low: R {r.p25.toLocaleString()}</span>
+                      <span className="text-[10px] font-semibold text-foreground/70">Mid: R {r.p50.toLocaleString()}</span>
+                      <span className="text-[10px] font-semibold text-foreground/70">Max: R {r.p75.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
